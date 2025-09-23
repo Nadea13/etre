@@ -8,7 +8,7 @@ const gemunuLibre = Gemunu_Libre({
 
 export const metadata = {
     title: "ETRE",
-    description: "",
+    description: "ETRE Shop",
 }
 
 export default function RootLayout({ children }) {
