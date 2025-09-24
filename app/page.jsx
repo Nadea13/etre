@@ -58,7 +58,7 @@ function PageInner() {
             ? url.replace("/upload/", `/upload/f_auto,q_auto,c_fill,w_${w},h_${h}/`)
             : url
 
-    const heroSize = (url, w = 1600, h = 600) =>
+    const heroSize = (url, w = 600, h = 600) =>
         url?.includes("/upload/")
             ? url.replace("/upload/", `/upload/f_auto,q_auto,c_fill,w_${w},h_${h}/`)
             : url
@@ -160,20 +160,59 @@ function PageInner() {
 
     const heroImg = useMemo(() => heroSize(firstUrl(activeCollectionObj?.images)), [activeCollectionObj])
 
+    const sameName = (a = "", b = "") =>
+        String(a).trim().toLowerCase() === String(b).trim().toLowerCase()
+
+    const inCollection = (item, collName) => {
+        if (!collName) return true
+        const raw = item?.colls
+        if (Array.isArray(raw)) return raw.some(x => sameName(x, collName))
+        if (typeof raw === "string") {
+            const parts = raw.split(",").map(s => s.trim()).filter(Boolean)
+            return parts.some(x => sameName(x, collName))
+        }
+        return false
+    }
+
+    const currentColl =
+        activeColl || (collections?.length ? collections[0]?.name : "")
+
     const filtered = useMemo(() => {
         let list = Array.isArray(products) ? products : []
-        if (activeColl) list = list.filter(it => (it.colls || "") === activeColl)
+
+        if (currentColl) list = list.filter(it => inCollection(it, currentColl))
+
         const s = q.trim().toLowerCase()
-        if (!s) return list
-        return list.filter(it =>
-            [it.name, it.colls, it.type, String(it.price ?? "")]
-                .some(v => String(v || "").toLowerCase().includes(s))
-        )
-    }, [products, activeColl, q])
+        if (s) {
+            list = list.filter(it =>
+                [it.name, it.colls, it.type, String(it.price ?? "")]
+                    .some(v => String(v || "").toLowerCase().includes(s))
+            )
+        }
+        return list
+    }, [products, currentColl, q])
 
     const colNames = useMemo(
         () => Array.from(new Set((collections || []).map(c => c?.name).filter(Boolean))),
         [collections]
+    )
+
+    if (loading) return (
+        <div className="absolute top-0 bg-black w-full h-full">
+            <div className="flex justify-center items-center h-full">
+                <svg viewBox="0 0 605 467" fill="none" className="h-32 animate-pulse" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M158.57 106.998C261.882 85.8724 365.982 81.8046 470.698 83.5762C470.451 86.4614 469.128 86.3858 468.013 86.4512C429.481 88.7116 391.196 93.2618 352.962 98.4333C318.831 103.05 284.892 108.701 251.38 116.642C226.913 122.439 202.651 129.036 180.046 140.49C175.133 142.98 170.27 145.592 166.263 149.433C160.894 154.579 161.562 159.48 168.189 162.95C179.696 168.974 192.304 170.765 204.977 170.867C252.296 171.247 299.618 171.257 346.938 171.282C431.255 171.325 515.571 171.276 599.888 171.272C601.506 171.272 603.189 170.992 604.854 172.033C604.482 174.192 602.628 174.426 601.268 175.044C564.13 191.937 526.975 208.79 489.828 225.662C487.053 226.923 484.208 227.498 481.129 227.497C359.32 227.47 237.51 227.651 115.702 227.376C87.9383 227.313 60.1316 226.253 32.9218 219.519C26.0894 217.828 19.4999 215.58 13.2748 212.328C-1.12503 204.804 -3.99055 192.305 5.56438 179.165C12.9297 169.036 22.5278 161.328 32.7004 154.301C55.0121 138.887 79.9866 129.258 105.592 121.014C122.873 115.45 140.46 111.067 158.57 106.998Z" fill="white" />
+                    <path d="M130.213 89.0189C114.953 92.9441 100.226 97.2344 85.4595 101.728C88.5407 96.4123 93.0529 92.8131 97.5919 89.3084C123.325 69.439 152.432 55.9577 182.742 44.8929C228.562 28.166 276.014 18.0441 324.193 11.3558C363.091 5.95589 402.199 3.08059 441.534 2.64284C465.68 2.37417 489.852 2.56896 513.976 1.68832C535.133 0.915916 556.275 1.18508 577.421 0.866691C584.372 0.762046 591.3 -0.490456 598.482 0.213737C598.332 2.88439 596.142 3.0071 594.691 3.69204C566.983 16.7665 539.248 29.7833 511.519 42.8128C506.095 45.3614 500.389 47.4496 495.309 50.5603C485.079 56.8247 473.935 58.2378 462.327 58.2606C443.336 58.2979 424.335 58.1256 405.356 58.6616C373.253 59.5683 341.163 60.8675 309.124 63.2882C286.242 65.0169 263.379 67.008 240.62 69.7988C204.645 74.2101 168.829 79.7559 133.552 88.3124C132.582 88.5476 131.593 88.7024 130.213 89.0189Z" fill="white" />
+                    <path d="M345.521 422.297C339.358 422.303 333.688 422.478 328.034 422.254C324.165 422.101 322.731 423.448 322.802 427.417C323.003 438.739 322.826 450.068 322.904 461.393C322.923 464.125 322.276 465.993 319.153 465.985C312.668 465.967 306.184 465.912 299.699 465.916C296.324 465.919 295.162 464.324 295.168 460.96C295.242 418.987 295.238 377.014 295.156 335.041C295.149 331.457 296.28 329.967 300.023 329.977C336.832 330.07 373.642 329.985 410.451 330.128C415.922 330.149 421.343 331.312 426.531 333.259C434.013 336.068 439.185 341.195 441.706 348.771C443.652 354.617 445.072 360.617 444.831 366.851C444.48 375.98 445.649 385.14 444.017 394.249C440.96 411.311 432.595 419.01 415.225 420.57C410.813 420.966 406.412 421.488 401.032 422.054C417.109 436.436 432.622 450.312 448.212 464.258C446.325 466.241 444.387 465.986 442.673 466.006C434.18 466.101 425.685 466.03 417.191 466.054C413.18 466.065 409.96 464.718 406.975 461.824C395.019 450.233 382.729 438.987 370.818 427.352C367.092 423.713 363.296 421.716 358.005 422.229C354.045 422.613 350.018 422.3 345.521 422.297ZM322.889 372.73C322.89 380.05 322.954 387.372 322.86 394.691C322.822 397.628 323.931 398.897 326.957 398.89C353.41 398.832 379.865 398.932 406.318 398.792C412.855 398.757 416.569 395.464 417.258 388.803C417.871 382.885 417.684 376.855 417.471 370.889C417.13 361.342 413.772 358.292 404.094 358.287C381.467 358.276 358.84 358.285 336.213 358.301C322.917 358.311 322.917 358.324 322.889 372.73Z" fill="white" />
+                    <path d="M141.59 465.186C139.065 465.654 136.922 466.071 134.778 466.074C96.2884 466.117 57.7986 466.116 19.3087 466.108C12.1834 466.106 12.1748 466.072 12.1739 458.888C12.171 436.394 12.205 413.9 12.1417 391.406C12.133 388.305 12.5433 386.559 16.4518 386.578C55.1064 386.771 93.762 386.769 132.417 386.82C139.653 386.829 139.657 386.824 139.674 393.902C139.682 397.235 139.472 400.582 139.714 403.896C140.038 408.345 138.079 409.584 133.831 409.564C104.506 409.425 75.179 409.584 45.8547 409.387C41.0925 409.355 39.2933 410.672 39.5959 415.554C39.9663 421.529 39.8092 427.548 39.6637 433.542C39.5773 437.099 40.9455 438.803 44.5787 438.783C58.074 438.709 71.5696 438.702 85.0651 438.673C103.039 438.635 121.012 438.592 138.986 438.58C140.711 438.579 142.601 438.836 142.584 441.098C142.523 449.048 143.626 457.033 141.59 465.186Z" fill="white" />
+                    <path d="M573.52 386.833C578.351 386.834 582.686 386.952 587.011 386.796C590.283 386.679 591.998 387.678 591.855 391.288C591.671 395.945 591.724 400.616 591.834 405.277C591.904 408.237 590.68 409.618 587.706 409.48C586.376 409.419 585.041 409.483 583.709 409.483C555.059 409.481 526.409 409.558 497.76 409.393C493.329 409.367 491.436 410.41 491.734 415.216C492.136 421.688 491.925 428.204 491.819 434.698C491.77 437.716 493.042 438.849 495.994 438.825C514.645 438.671 533.298 438.542 551.95 438.518C565.102 438.501 578.255 438.701 591.407 438.714C594.031 438.716 594.901 439.853 594.871 442.338C594.791 449 594.784 455.664 594.871 462.326C594.905 464.907 593.665 465.947 591.286 466.027C590.121 466.067 588.955 466.097 587.79 466.097C550.146 466.104 512.502 466.108 474.857 466.104C473.026 466.104 471.195 465.982 469.364 465.99C465.85 466.004 464.371 464.411 464.385 460.789C464.475 437.636 464.479 414.483 464.377 391.331C464.36 387.452 466.088 386.682 469.582 386.695C504.062 386.823 538.541 386.808 573.52 386.833Z" fill="white" />
+                    <path d="M154.346 341.247C154.408 328.46 153.295 330.05 164.978 330.035C201.291 329.987 237.604 330.011 273.917 330.016C280.761 330.018 280.769 330.039 280.786 336.989C280.797 341.82 280.798 346.651 280.778 351.481C280.751 357.888 280.569 358.101 273.915 358.126C261.922 358.17 249.928 358.137 237.935 358.162C231.789 358.174 231.477 358.447 231.473 364.69C231.449 394.84 231.466 424.99 231.463 455.14C231.463 457.138 231.338 459.139 231.404 461.134C231.525 464.738 229.814 466.184 226.267 466.102C220.774 465.975 215.273 465.991 209.778 466.092C205.646 466.168 204.044 464.631 204.069 460.195C204.251 428.713 204.163 397.23 204.174 365.748C204.178 356.434 204.074 357.836 196.519 358.045C184.368 358.381 172.201 358.056 160.043 358.209C155.704 358.263 154.023 356.509 154.312 352.232C154.547 348.75 154.351 345.239 154.346 341.247Z" fill="white" />
+                    <path d="M138.292 330.025C141.468 329.896 142.74 331.162 142.725 333.886C142.689 340.709 142.696 347.532 142.723 354.355C142.734 356.886 141.341 357.935 139.018 358.068C137.69 358.143 136.358 358.182 135.028 358.183C96.4174 358.213 57.8066 358.242 19.1959 358.256C12.1945 358.259 12.188 358.229 12.1733 351.416C12.1624 346.423 12.4607 341.408 12.0899 336.443C11.7187 331.473 13.3232 329.856 18.4914 329.89C53.1067 330.114 87.7241 330.011 122.341 330.014C127.5 330.015 132.659 330.017 138.292 330.025Z" fill="white" />
+                    <path d="M464.393 349.121C464.399 344.142 464.56 339.642 464.363 335.157C464.191 331.223 465.836 329.953 469.681 329.978C489.487 330.108 509.293 330.035 529.099 330.04C549.072 330.044 569.045 330.177 589.016 329.976C593.638 329.929 595.199 331.449 594.939 335.998C594.617 341.638 594.646 347.321 594.925 352.966C595.125 357.014 593.384 358.244 589.663 358.157C583.841 358.021 578.013 358.127 572.188 358.133C539.067 358.172 505.947 358.218 472.826 358.247C464.425 358.255 464.425 358.231 464.393 349.121Z" fill="white" />
+                    <path d="M75.5741 287.191C82.7708 286.098 87.7084 288.716 92.1707 293.785C97.7741 300.151 104.096 305.882 110.079 311.916C111.226 313.072 112.665 314.04 113.119 315.768C111.65 317.802 109.706 316.547 108.012 316.659C106.852 316.736 105.678 316.583 104.516 316.641C93.9415 317.167 83.2284 318.124 77.4921 306.673C71.2595 308.918 69.7562 316.395 63.35 316.594C55.5 316.838 47.6366 316.652 39.7407 316.652C39.8804 313.722 41.626 312.739 42.8656 311.483C49.0691 305.202 55.5881 299.211 61.5062 292.675C65.3273 288.455 69.5144 286.409 75.5741 287.191Z" fill="white" />
+                </svg>
+            </div>
+        </div>
     )
 
     return (
@@ -201,11 +240,21 @@ function PageInner() {
                         <div
                             className="text-white text-sm cursor-pointer md:text-md lg:text-xl"
                             onClick={() => setCollectionDrop(v => !v)}
+                            aria-expanded={collectionDrop}
                         >
-                            <div className="flex gap-3 p-2 hover:bg-white hover:text-black">
+                            <div className="flex gap-3 p-2">
                                 <span>{activeColl || activeCollectionObj?.name}</span>
-                                <svg viewBox="0 0 24 25" className="fill-current h-4 md:h-5 lg:h-8" xmlns="http://www.w3.org/2000/svg">
-                                    <path fillRule="evenodd" clipRule="evenodd" d="M6 7.5L12 13.5L18 7.5L20 9.5L12 17.5L4 9.5L6 7.5Z" />
+                                <svg
+                                    viewBox="0 0 24 25"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className={`fill-current h-4 md:h-5 lg:h-8 transition-transform duration-500 ${collectionDrop ? "rotate-180" : "rotate-0"
+                                        }`}
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
+                                        d="M6 7.5L12 13.5L18 7.5L20 9.5L12 17.5L4 9.5L6 7.5Z"
+                                    />
                                 </svg>
                             </div>
                         </div>
@@ -213,39 +262,48 @@ function PageInner() {
                 )}
 
                 <button
-                    className="rounded-full p-2 hover:bg-white group"
+                    className="rounded-full p-2 group cursor-pointer"
                     aria-label="search"
+                    aria-pressed={showSearch}
                     title="Search"
                     onClick={() => {
                         setShowSearch(v => !v)
                         setTimeout(() => inputRef.current?.focus(), 0)
                     }}
                 >
-                    <svg viewBox="0 0 32 32" className="fill-white group-hover:fill-black h-4 md:h-6 lg:h-8" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M26.1333 28L17.7333 19.6C17.0667 20.1333 16.3 20.5556 15.4333 20.8667C14.5667 21.1778 13.6444 21.3333 12.6667 21.3333C10.2444 21.3333 8.19467 20.4942 6.51733 18.816C4.84 17.1378 4.00089 15.088 4 12.6667C3.99911 10.2453 4.83822 8.19556 6.51733 6.51733C8.19645 4.83911 10.2462 4 12.6667 4C15.0871 4 17.1373 4.83911 18.8173 6.51733C20.4973 8.19556 21.336 10.2453 21.3333 12.6667C21.3333 13.6444 21.1778 14.5667 20.8667 15.4333C20.5556 16.3 20.1333 17.0667 19.6 17.7333L28 26.1333L26.1333 28ZM12.6667 18.6667C14.3333 18.6667 15.7502 18.0836 16.9173 16.9173C18.0844 15.7511 18.6676 14.3342 18.6667 12.6667C18.6658 10.9991 18.0827 9.58267 16.9173 8.41733C15.752 7.252 14.3351 6.66844 12.6667 6.66667C10.9982 6.66489 9.58178 7.24844 8.41733 8.41733C7.25289 9.58622 6.66933 11.0027 6.66667 12.6667C6.664 14.3307 7.24756 15.7476 8.41733 16.9173C9.58711 18.0871 11.0036 18.6702 12.6667 18.6667Z" />
+                    <svg
+                        viewBox="0 0 32 32"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 md:h-6 lg:h-8 transition-colors fill-white"
+                    >
+                        {showSearch ? (
+                            <path d="M8.53335 25.3334L6.66669 23.4667L14.1334 16.0001L6.66669 8.53341L8.53335 6.66675L16 14.1334L23.4667 6.66675L25.3334 8.53341L17.8667 16.0001L25.3334 23.4667L23.4667 25.3334L16 17.8667L8.53335 25.3334Z" />
+                        ) : (
+                            <path d="M26.1333 28L17.7333 19.6C17.0667 20.1333 16.3 20.5556 15.4333 20.8667C14.5667 21.1778 13.6444 21.3333 12.6667 21.3333C10.2444 21.3333 8.19467 20.4942 6.51733 18.816C4.84 17.1378 4.00089 15.088 4 12.6667C3.99911 10.2453 4.83822 8.19556 6.51733 6.51733C8.19645 4.83911 10.2462 4 12.6667 4C15.0871 4 17.1373 4.83911 18.8173 6.51733C20.4973 8.19556 21.336 10.2453 21.3333 12.6667C21.3333 13.6444 21.1778 14.5667 20.8667 15.4333C20.5556 16.3 20.1333 17.0667 19.6 17.7333L28 26.1333L26.1333 28ZM12.6667 18.6667C14.3333 18.6667 15.7502 18.0836 16.9173 16.9173C18.0844 15.7511 18.6676 14.3342 18.6667 12.6667C18.6658 10.9991 18.0827 9.58267 16.9173 8.41733C15.752 7.252 14.3351 6.66844 12.6667 6.66667C10.9982 6.66489 9.58178 7.24844 8.41733 8.41733C7.25289 9.58622 6.66933 11.0027 6.66667 12.6667C6.664 14.3307 7.24756 15.7476 8.41733 16.9173C9.58711 18.0871 11.0036 18.6702 12.6667 18.6667Z" />
+                        )}
                     </svg>
                 </button>
             </nav>
 
             <main className="pt-16">
-                <div className="relative w-full h-[calc(100vh-4rem)] sm:h-auto sm:aspect-[16/9] lg:aspect-[21/9]">
+                <div className="relative w-full">
                     {heroImg ? (
-                        <div>
+                        <>
                             <img
                                 src={heroImg}
                                 alt={activeCollectionObj?.name || "Collection"}
-                                className="absolute inset-0 w-fit h-full object-cover"
+                                className="block w-full h-auto"
                                 loading="lazy"
-                                sizes="100vw"
+                                sizes="100vh"
                             />
                             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                                 <span className="text-white text-3xl md:text-5xl font-semibold drop-shadow-lg">
                                     {activeCollectionObj?.name || "Collection"}
                                 </span>
                             </div>
-                        </div>
+                        </>
                     ) : (
-                        <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300" />
+                        <div className="h-[300px] bg-gradient-to-br from-gray-200 to-gray-300" />
                     )}
                 </div>
 
@@ -271,7 +329,7 @@ function PageInner() {
                                                     <div className="absolute inset-0 bg-gray-300" />
                                                 )}
                                             </div>
-                                            <a href={it.url} className="block bg-black text-white text-center text-sm py-3 w-full cursor-pointer md:text-lg lg:text-xl">
+                                            <a href={it.url} className="block bg-black text-white text-center text-sm py-2 w-full cursor-pointer md:text-lg md:p-3 lg:text-xl">
                                                 Shop now
                                             </a>
                                         </div>
@@ -290,7 +348,7 @@ function PageInner() {
                 </section>
             </main>
 
-            <footer className="flex justify-between items-center bg-black text-white p-2 md:p-4 lg:p-6">
+            <footer className="flex justify-between items-center bg-black text-white p-4 md:p-6">
                 <span className="text-sm md:text-md lg:text-lg">Copyright © 2025 Etre shop</span>
                 <div className="flex gap-3 items-center">
                     <span className="text-sm md:text-md lg:text-lg">Contact</span>
@@ -310,7 +368,7 @@ function PageInner() {
             </footer>
 
             {collectionDrop && (
-                <div className="fixed top-16 left-0 right-0 z-50 flex justify-center text-white">
+                <div className="fixed top-17 left-0 right-0 z-50 flex justify-center text-white lg:top-20">
                     <div className="bg-black overflow-hidden min-w-full md:min-w-[240px] shadow-md">
                         {colNames.map((name) => (
                             <button
@@ -336,7 +394,7 @@ function PageInner() {
                         onClick={() => setGalleryOpen(false)}
                         className="absolute top-3 right-3 md:top-6 md:right-6 rounded-full bg-white/90 text-black p-2 shadow hover:bg-white"
                     >
-                        <svg viewBox="0 0 24 24" fill="none" className="fill-black h-4 md:h-6 lg:h-8" xmlns="http://www.w3.org/2000/svg">
+                        <svg viewBox="0 0 24 24" fill="none" className="fill-black h-6 md:h-8" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" />
                         </svg>
                     </button>
@@ -357,7 +415,7 @@ function PageInner() {
                                         onClick={() => setGallery(g => ({ ...g, index: (g.index - 1 + g.items.length) % g.items.length }))}
                                         className="absolute left-2 top-1/2 translate-y-1/2 bg-white hover:bg-white text-black rounded-full p-2 grid place-items-center cursor-pointer"
                                     >
-                                        <svg viewBox="0 0 24 24" fill="none" className="fill-black h-4 md:h-6 lg:h-8" xmlns="http://www.w3.org/2000/svg">
+                                        <svg viewBox="0 0 24 24" fill="none" className="fill-black h-6 md:h-8" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M16 22L6 12L16 2L17.775 3.775L9.55 12L17.775 20.225L16 22Z" />
                                         </svg>
                                     </button>
@@ -366,7 +424,7 @@ function PageInner() {
                                         onClick={() => setGallery(g => ({ ...g, index: (g.index + 1) % g.items.length }))}
                                         className="absolute right-2 top-1/2 translate-y-1/2 bg-white hover:bg-white text-black rounded-full p-2 grid place-items-center cursor-pointer"
                                     >
-                                        <svg viewBox="0 0 24 24" fill="none" className="fill-black h-4 md:h-6 lg:h-8" xmlns="http://www.w3.org/2000/svg">
+                                        <svg viewBox="0 0 24 24" fill="none" className="fill-black h-4 h-6 md:h-8" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M8.025 22L6.25 20.225L14.475 12L6.25 3.775L8.025 2L18.025 12L8.025 22Z" />
                                         </svg>
                                     </button>
