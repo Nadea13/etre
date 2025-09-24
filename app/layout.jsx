@@ -7,7 +7,7 @@ const gemunuLibre = Gemunu_Libre({
 })
 
 export const metadata = {
-    title: "ETRE",
+    title: "ÊTRE",
     description: "ETRE Shop",
 }
 
