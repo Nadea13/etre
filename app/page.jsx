@@ -268,8 +268,8 @@ function PageInner() {
                                                 Shop now
                                             </a>
                                         </div>
-                                        <h3 className="mt-2 text-sm md:text-lg lg:text-xl">{it.name}</h3>
-                                        {it.price !== "" && it.price != null && <span className="text-sm md:text-lg lg:text-xl">{Number(it.price)} Bath</span>}
+                                        <h3 className="mt-2 text-black text-sm md:text-lg lg:text-xl">{it.name}</h3>
+                                        {it.price !== "" && it.price != null && <span className="text-black text-sm md:text-lg lg:text-xl">{Number(it.price)} Bath</span>}
                                     </div>
                                 )
                             })}
