@@ -228,15 +228,22 @@ function PageInner() {
             </nav>
 
             <main className="pt-16">
-                <div className="relative w-full h-screen sm:h-auto sm:aspect-[16/9] lg:aspect-[21/9]">
+                <div className="relative w-full h-[calc(100vh-4rem)] sm:h-auto sm:aspect-[16/9] lg:aspect-[21/9]">
                     {heroImg ? (
-                        <img
-                            src={heroImg}
-                            alt={activeCollectionObj?.name || "Collection"}
-                            className="absolute inset-0 w-fit h-full object-cover"
-                            loading="lazy"
-                            sizes="100vw"
-                        />
+                        <div>
+                            <img
+                                src={heroImg}
+                                alt={activeCollectionObj?.name || "Collection"}
+                                className="absolute inset-0 w-fit h-full object-cover"
+                                loading="lazy"
+                                sizes="100vw"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <span className="text-white text-3xl md:text-5xl font-semibold drop-shadow-lg">
+                                    {activeCollectionObj?.name || "Collection"}
+                                </span>
+                            </div>
+                        </div>
                     ) : (
                         <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300" />
                     )}
