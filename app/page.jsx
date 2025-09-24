@@ -4,11 +4,11 @@ import React, { useEffect, useMemo, useRef, useState, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 
 export default function Page() {
-  return (
-    <Suspense fallback={<div className="h-12" />}>
-      <PageInner />
-    </Suspense>
-  )
+    return (
+        <Suspense fallback={<div className="h-12" />}>
+            <PageInner />
+        </Suspense>
+    )
 }
 
 function PageInner() {
@@ -17,6 +17,9 @@ function PageInner() {
     const [collections, setCollections] = useState([])
     const [activeColl, setActiveColl] = useState("")
     const [loading, setLoading] = useState(false)
+    const [imgShow, setImgShow] = useState(false)
+    const [galleryOpen, setGalleryOpen] = useState(false)
+    const [gallery, setGallery] = useState({ items: [], index: 0, title: "" })
 
     const router = useRouter()
     const params = useSearchParams()
@@ -75,6 +78,61 @@ function PageInner() {
         return images?.url || ""
     }
 
+    const toArrayImages = (images) => {
+        if (!images) return []
+        if (typeof images === "string") {
+            try { return toArrayImages(JSON.parse(images)) }
+            catch { return images.split(",").map(s => s.trim()).filter(Boolean) }
+        }
+        if (Array.isArray(images)) return images.map(x => typeof x === "string" ? x : x?.url).filter(Boolean)
+        if (typeof images === "object") return [images?.url].filter(Boolean)
+        return []
+    }
+
+    const bigImg = (url, w = 1400, h = 1867) =>
+        url?.includes("/upload/")
+            ? url.replace("/upload/", `/upload/f_auto,q_auto,c_fit,w_${w},h_${h}/`)
+            : url
+
+    const smallThumb = (url, w = 120, h = 160) =>
+        url?.includes("/upload/")
+            ? url.replace("/upload/", `/upload/f_auto,q_auto,c_fill,w_${w},h_${h}/`)
+            : url
+
+    const openGallery = (product) => {
+        const items = toArrayImages(product.images).map(u => bigImg(u))
+        setGallery({ items, index: 0, title: product?.name || "" })
+        setGalleryOpen(true)
+    }
+
+    useEffect(() => {
+        if (!galleryOpen) return
+        const onKey = (e) => {
+            if (e.key === "Escape") setGalleryOpen(false)
+            if (e.key === "ArrowLeft") setGallery(g => ({ ...g, index: (g.index - 1 + g.items.length) % g.items.length }))
+            if (e.key === "ArrowRight") setGallery(g => ({ ...g, index: (g.index + 1) % g.items.length }))
+        }
+        window.addEventListener("keydown", onKey)
+        const prev = document.body.style.overflow
+        document.body.style.overflow = "hidden"
+        return () => {
+            window.removeEventListener("keydown", onKey)
+            document.body.style.overflow = prev
+        }
+    }, [galleryOpen])
+
+    useEffect(() => {
+        if (!imgShow) return
+        const onKey = (e) => e.key === "Escape" && setImgShow(false)
+        window.addEventListener("keydown", onKey)
+        const prev = document.body.style.overflow
+        document.body.style.overflow = "hidden"
+        return () => {
+            window.removeEventListener("keydown", onKey)
+            document.body.style.overflow = prev
+        }
+    }, [imgShow])
+
     useEffect(() => {
         const run = async () => {
             setLoading(true)
@@ -119,7 +177,7 @@ function PageInner() {
     )
 
     return (
-        <div>
+        <div className="">
             <nav className="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-3 w-full p-4 bg-black shadow-md">
                 <button aria-label="home" className="shrink-0">
                     <svg viewBox="0 0 86 32" className="fill-white h-4 md:h-6 lg:h-8" xmlns="http://www.w3.org/2000/svg">
@@ -196,7 +254,12 @@ function PageInner() {
                                         <div className="bg-gray-100">
                                             <div className="relative w-full aspect-[3/4]">
                                                 {imgSrc ? (
-                                                    <img src={imgSrc} alt={it.name} className="absolute inset-0 h-full w-full object-cover" />
+                                                    <img
+                                                        src={imgSrc}
+                                                        alt={it.name}
+                                                        onClick={() => openGallery(it)}
+                                                        className="absolute inset-0 h-full w-full object-cover cursor-zoom-in"
+                                                    />
                                                 ) : (
                                                     <div className="absolute inset-0 bg-gray-300" />
                                                 )}
@@ -251,6 +314,74 @@ function PageInner() {
                                 {name}
                             </button>
                         ))}
+                    </div>
+                </div>
+            )}
+            {galleryOpen && (
+                <div
+                    className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex flex-col items-center justify-center p-4"
+                    role="dialog"
+                    aria-modal="true"
+                    onClick={() => setGalleryOpen(false)}
+                >
+                    <button
+                        aria-label="Close"
+                        onClick={() => setGalleryOpen(false)}
+                        className="absolute top-3 right-3 md:top-6 md:right-6 rounded-full bg-white/90 text-black p-2 shadow hover:bg-white"
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" className="fill-black h-4 md:h-6 lg:h-8" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" />
+                        </svg>
+                    </button>
+                    <div className="relative w-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
+
+                        <div className="relative w-full aspect-[3/4] md:aspect-[16/10] overflow-hidden">
+                            <img
+                                src={gallery.items[gallery.index]}
+                                alt={`${gallery.title} ${gallery.index + 1}/${gallery.items.length}`}
+                                className="absolute inset-0 h-full w-full object-contain"
+                                loading="eager"
+                            />
+
+                            {gallery.items.length > 1 && (
+                                <>
+                                    <button
+                                        aria-label="Prev"
+                                        onClick={() => setGallery(g => ({ ...g, index: (g.index - 1 + g.items.length) % g.items.length }))}
+                                        className="absolute left-2 top-1/2 translate-y-1/2 bg-white hover:bg-white text-black rounded-full p-2 grid place-items-center cursor-pointer"
+                                    >
+                                        <svg viewBox="0 0 24 24" fill="none" className="fill-black h-4 md:h-6 lg:h-8" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M16 22L6 12L16 2L17.775 3.775L9.55 12L17.775 20.225L16 22Z" />
+                                        </svg>
+                                    </button>
+                                    <button
+                                        aria-label="Next"
+                                        onClick={() => setGallery(g => ({ ...g, index: (g.index + 1) % g.items.length }))}
+                                        className="absolute right-2 top-1/2 translate-y-1/2 bg-white hover:bg-white text-black rounded-full p-2 grid place-items-center cursor-pointer"
+                                    >
+                                        <svg viewBox="0 0 24 24" fill="none" className="fill-black h-4 md:h-6 lg:h-8" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M8.025 22L6.25 20.225L14.475 12L6.25 3.775L8.025 2L18.025 12L8.025 22Z" />
+                                        </svg>
+                                    </button>
+                                </>
+                            )}
+                        </div>
+
+                        {gallery.items.length > 1 && (
+                            <div className="mt-3 flex gap-2 overflow-x-auto">
+                                {gallery.items.map((u, i) => (
+                                    <button
+                                        key={`${u}-${i}`}
+                                        onClick={() => setGallery(g => ({ ...g, index: i }))}
+                                        className={`relative shrink-0 w-16 h-20 overflow-hidden ring-2 ${i === gallery.index ? "ring-white" : "ring-transparent"}`}
+                                        aria-label={`Thumbnail ${i + 1}`}
+                                        title={`Image ${i + 1}`}
+                                    >
+                                        <img src={smallThumb(u)} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
