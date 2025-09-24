@@ -177,7 +177,7 @@ function PageInner() {
     )
 
     return (
-        <div className="">
+        <div className="bg-white">
             <nav className="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-3 w-full p-4 bg-black shadow-md">
                 <button aria-label="home" className="shrink-0">
                     <svg viewBox="0 0 86 32" className="fill-white h-4 md:h-6 lg:h-8" xmlns="http://www.w3.org/2000/svg">
@@ -228,12 +228,12 @@ function PageInner() {
             </nav>
 
             <main className="pt-16">
-                <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9]">
+                <div className="relative w-full h-screen sm:h-auto sm:aspect-[16/9] lg:aspect-[21/9]">
                     {heroImg ? (
                         <img
                             src={heroImg}
                             alt={activeCollectionObj?.name || "Collection"}
-                            className="absolute inset-0 w-full h-full object-cover"
+                            className="absolute inset-0 w-fit h-full object-cover"
                             loading="lazy"
                             sizes="100vw"
                         />
