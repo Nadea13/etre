@@ -11,12 +11,12 @@ import Footer from './components/Footer';
 
 const EtreLandingPage = () => {
     return (
-        <div className='bg-white dark:bg-black font-display antialiased selection:bg-[#AC593B] selection:text-white'>
+        <div className='bg-white font-display antialiased selection:bg-[#C4002E] selection:text-white'>
             {/* Global Noise Overlay */}
-            <div className='fixed inset-0 pointer-events-none z-50 mix-blend-overlay bg-noise opacity-40'></div>
+            <div className='fixed inset-0 pointer-events-none z-50 mix-blend-overlay bg-noise opacity-20'></div>
 
             {/* Main Container */}
-            <div className='relative flex min-h-screen w-full flex-col overflow-x-hidden text-white'>
+            <div className='relative flex min-h-screen w-full flex-col overflow-x-hidden text-black'>
                 <Header />
                 <Hero />
                 <FeaturedSection />
