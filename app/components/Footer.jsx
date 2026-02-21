@@ -8,14 +8,14 @@ const Footer = () => {
             <div className='px-6 max-w-7xl mx-auto flex flex-col gap-12'>
                 <div className='grid grid-cols-2 md:grid-cols-4 gap-8'>
                     <div className='flex flex-col gap-4'>
-                        <h5 className='text-[#C4002E] font-bold uppercase text-xs tracking-widest'>Navigation</h5>
+                        <h5 className='text-[#C4002E] font-bold text-xs tracking-widest'>Navigation</h5>
                         <div className='flex flex-col gap-2 text-sm text-gray-400'>
                             <a className='hover:text-black transition-colors' href='#'>Shop</a>
                             <a className='hover:text-black transition-colors' href='#'>Collections</a>
                         </div>
                     </div>
                     <div className='flex flex-col gap-4'>
-                        <h5 className='text-[#C4002E] font-bold uppercase text-xs tracking-widest'>Company</h5>
+                        <h5 className='text-[#C4002E] font-bold text-xs tracking-widest'>Company</h5>
                         <div className='flex flex-col gap-2 text-sm text-gray-400'>
                             <a className='hover:text-black transition-colors' href='#'>About</a>
                             <a className='hover:text-black transition-colors' href='#'>Contact</a>

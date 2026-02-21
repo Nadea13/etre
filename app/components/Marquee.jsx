@@ -10,10 +10,10 @@ const Marquee = () => {
 
             <div className='flex whitespace-nowrap'>
                 <div className='flex gap-16 animate-marquee items-center'>
-                    <h2 className='text-5xl md:text-7xl font-bold uppercase tracking-tighter'>
+                    <h2 className='text-5xl md:text-7xl font-bold tracking-tighter'>
                         <span className='text-black'>Être</span> <span className='text-[#C4002E]'>Rise With Confidence</span> <span className='text-black/20 mx-4'> </span> <span className='text-black'>Être</span> <span className='text-[#C4002E]'>Rise With Confidence</span> <span className='text-black/20 mx-4'> </span>
                     </h2>
-                    <h2 className='text-5xl md:text-7xl font-bold uppercase tracking-tighter'>
+                    <h2 className='text-5xl md:text-7xl font-bold tracking-tighter'>
                         <span className='text-black'>Être</span> <span className='text-[#C4002E]'>Rise With Confidence</span> <span className='text-black/20 mx-4'> </span> <span className='text-black'>Être</span> <span className='text-[#C4002E]'>Rise With Confidence</span> <span className='text-black/20 mx-4'> </span>
                     </h2>
                 </div>
