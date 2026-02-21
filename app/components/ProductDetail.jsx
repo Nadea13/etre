@@ -1,12 +1,12 @@
 
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight, ShoppingBag } from 'lucide-react';
 
 const ProductDetail = ({ isOpen, onClose, product }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [selectedSize, setSelectedSize] = useState('M');
-    const [isAnimating, setIsAnimating] = useState(false);
+    const sizeGuideRef = useRef(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -26,6 +26,10 @@ const ProductDetail = ({ isOpen, onClose, product }) => {
 
     const prevImage = () => {
         setCurrentImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length);
+    };
+
+    const scrollToSizeGuide = () => {
+        sizeGuideRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
@@ -48,7 +52,7 @@ const ProductDetail = ({ isOpen, onClose, product }) => {
                 </button>
 
                 {/* Left: Image Gallery */}
-                <div className="relative w-full md:w-3/5 bg-gray-50 flex flex-col h-1/2 md:h-auto">
+                <div className="relative w-full md:w-3/5 bg-gray-50 flex flex-col h-1/2 md:h-auto border-b md:border-b-0 md:border-r border-gray-100">
                     <div className="relative flex-1 overflow-hidden flex items-center justify-center">
                         <img
                             src={product.images[currentImageIndex]}
@@ -75,7 +79,7 @@ const ProductDetail = ({ isOpen, onClose, product }) => {
                     </div>
 
                     {/* Thumbnails */}
-                    <div className="flex gap-2 p-4 overflow-x-auto bg-white border-t border-gray-100">
+                    <div className="flex gap-2 p-4 overflow-x-auto bg-white border-t border-gray-100 scrollbar-hide">
                         {product.images.map((img, idx) => (
                             <button
                                 key={idx}
@@ -89,45 +93,61 @@ const ProductDetail = ({ isOpen, onClose, product }) => {
                 </div>
 
                 {/* Right: Product Info */}
-                <div className="w-full md:w-2/5 p-8 md:p-12 overflow-y-auto flex flex-col gap-8 bg-white h-1/2 md:h-auto">
-                    <div className="flex flex-col gap-2">
-                        <span className="text-[#C4002E] font-bold text-xs tracking-widest uppercase">{product.collection}</span>
-                        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighter text-black leading-tight">
-                            {product.name}
-                        </h2>
-                        <p className="text-2xl font-bold text-gray-900 mt-2">
-                            {product.price}
-                        </p>
-                    </div>
-
-                    <div className="h-px bg-gray-100 w-full"></div>
-
-                    <div className="flex flex-col gap-4">
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Select Size</span>
-                            <button className="text-[10px] text-gray-400 border-b border-gray-400 hover:text-black hover:border-black transition-all">Size Guide</button>
+                <div className="w-full md:w-2/5 flex flex-col bg-white h-1/2 md:h-auto overflow-hidden">
+                    <div className="flex-1 overflow-y-auto p-8 md:p-10 flex flex-col gap-8 scroll-smooth">
+                        <div className="flex flex-col gap-2">
+                            <span className="text-[#C4002E] font-bold text-xs tracking-widest uppercase">{product.collection}</span>
+                            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighter text-black leading-tight">
+                                {product.name}
+                            </h2>
+                            <p className="text-2xl font-bold text-gray-900 mt-2">
+                                {product.price}
+                            </p>
                         </div>
-                        <div className="flex gap-3 flex-wrap">
-                            {['S', 'M', 'L', 'XL', '2XL'].map((size) => (
+
+                        <div className="h-px bg-gray-100 w-full"></div>
+
+                        <div className="flex flex-col gap-4">
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Select Size</span>
                                 <button
-                                    key={size}
-                                    onClick={() => setSelectedSize(size)}
-                                    className={`w-12 h-12 flex items-center justify-center font-bold text-sm border-2 transition-all ${selectedSize === size ? 'bg-black text-white border-black' : 'bg-transparent text-gray-400 border-gray-200 hover:border-black hover:text-black'}`}
+                                    onClick={scrollToSizeGuide}
+                                    className="text-[10px] text-gray-400 border-b border-gray-400 hover:text-black hover:border-black transition-all"
                                 >
-                                    {size}
+                                    Size Guide
                                 </button>
-                            ))}
+                            </div>
+                            <div className="flex gap-3 flex-wrap">
+                                {['S', 'M', 'L', 'XL', '2XL'].map((size) => (
+                                    <button
+                                        key={size}
+                                        onClick={() => setSelectedSize(size)}
+                                        className={`w-12 h-12 flex items-center justify-center font-bold text-sm border-2 transition-all ${selectedSize === size ? 'bg-black text-white border-black' : 'bg-transparent text-gray-400 border-gray-200 hover:border-black hover:text-black'}`}
+                                    >
+                                        {size}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                            <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Description</span>
+                            <p className="text-gray-600 leading-relaxed text-sm whitespace-pre-wrap">
+                                {product.description || "No description available for this product."}
+                            </p>
+                        </div>
+
+                        {/* Size Guide Images Section */}
+                        <div ref={sizeGuideRef} className="flex flex-col gap-4 pt-4">
+                            <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Size Guide</span>
+                            <div className="flex flex-col gap-4">
+                                <img src="/uploads/IMG_1432.JPG" alt="Size Guide 1" className="w-full h-auto border border-gray-100" />
+                                <img src="/uploads/IMG_1433.JPG" alt="Size Guide 2" className="w-full h-auto border border-gray-100" />
+                            </div>
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-3">
-                        <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Description</span>
-                        <p className="text-gray-600 leading-relaxed text-sm whitespace-pre-wrap">
-                            {product.description || "No description available for this product."}
-                        </p>
-                    </div>
-
-                    <div className="mt-auto pt-8">
+                    <div className="p-8 border-t border-gray-100 bg-white">
                         <button className="w-full bg-[#C4002E] text-white py-5 font-bold tracking-widest text-sm uppercase flex items-center justify-center gap-4 transition-all hover:bg-black active:scale-95 shadow-xl">
                             <ShoppingBag className="w-5 h-5" />
                             Add to Cart
