@@ -36,7 +36,7 @@ const Hero = () => {
             <div className='relative z-10 px-6 max-w-7xl mx-auto w-full flex flex-col gap-6'>
                 <div className='flex flex-col gap-2'>
                     <h1 className='text-6xl md:text-8xl font-bold leading-[0.85] tracking-tighter drop-shadow-2xl'>
-                        Rise<br /><span className='text-[#C4002E]'>With</span><br />Confidence.
+                        <span className='text-[#C4002E]'>Rise</span><br />With<br /><span className='text-[#C4002E]'>Confidence.</span>
                     </h1>
                     <div className='h-1.5 w-24 bg-[#C4002E] mt-6 mb-2'></div>
                     <p className='text-gray-600 text-sm md:text-lg font-medium tracking-wide max-w-sm'>
