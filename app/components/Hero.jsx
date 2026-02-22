@@ -38,10 +38,7 @@ const Hero = () => {
                     <h1 className='text-5xl md:text-7xl font-bold leading-[0.85] tracking-tighter drop-shadow-2xl'>
                         <span className='text-[#C4002E]'>Rise</span><br />With<br /><span className='text-[#C4002E]'>Confidence.</span>
                     </h1>
-                    <div className='h-1.5 w-24 bg-[#C4002E] mt-4 mb-2'></div>
-                    <p className='text-gray-600 text-sm md:text-lg font-medium tracking-wide max-w-sm'>
-                        Experience the fusion of elite performance and street aesthetics.
-                    </p>
+                    <div className='h-1.5 w-24 bg-[#C4002E] mt-4'></div>
                 </div>
                 <div className='pt-4'>
                     <button className='group relative overflow-hidden bg-[#C4002E] text-white px-10 py-5 w-full md:w-auto min-w-[240px] text-center font-bold tracking-widest text-sm transition-all active:scale-95 hover:bg-[#914a31] rounded-none shadow-xl'>
