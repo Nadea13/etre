@@ -18,7 +18,7 @@ export const metadata = {
     openGraph: {
         title: "ÊTRE | Rise With Confidence",
         description: "Experience the fusion of elite performance and street aesthetics.",
-        url: "https://etre42.com",
+        url: "https://etre-nine.vercel.app",
         siteName: "ÊTRE Sportswear",
         locale: "th_TH",
         type: "website",
