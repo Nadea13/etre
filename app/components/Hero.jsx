@@ -6,8 +6,8 @@ import { ArrowRight } from 'lucide-react';
 const slides = [
     '/uploads/486A0090.jpg',
     '/uploads/486A9348.jpg',
-    '/uploads/486A9912.jpg',
-    '/uploads/486A9818.jpg',
+    '/uploads/486A0070.jpg',
+    '/uploads/486A9732.jpg',
 ];
 
 const Hero = () => {
@@ -35,10 +35,10 @@ const Hero = () => {
 
             <div className='relative z-10 px-6 max-w-7xl mx-auto w-full flex flex-col gap-6'>
                 <div className='flex flex-col gap-2'>
-                    <h1 className='text-6xl md:text-8xl font-bold leading-[0.85] tracking-tighter drop-shadow-2xl'>
+                    <h1 className='text-5xl md:text-7xl font-bold leading-[0.85] tracking-tighter drop-shadow-2xl'>
                         <span className='text-[#C4002E]'>Rise</span><br />With<br /><span className='text-[#C4002E]'>Confidence.</span>
                     </h1>
-                    <div className='h-1.5 w-24 bg-[#C4002E] mt-6 mb-2'></div>
+                    <div className='h-1.5 w-24 bg-[#C4002E] mt-4 mb-2'></div>
                     <p className='text-gray-600 text-sm md:text-lg font-medium tracking-wide max-w-sm'>
                         Experience the fusion of elite performance and street aesthetics.
                     </p>
