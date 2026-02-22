@@ -11,7 +11,7 @@ const CollectionsTeaser = () => {
             <div className='grid md:grid-cols-2 gap-6'>
                 <div className='relative h-64 md:h-80 w-full overflow-hidden group cursor-pointer border border-gray-200'>
                     <div className='absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110'
-                        style={{ backgroundImage: 'url(/uploads/486A9912.jpg)' }}></div>
+                        style={{ backgroundImage: 'url(/uploads/486A0090_collection.jpg)' }}></div>
                     <div className='absolute inset-0 bg-black/60 group-hover:bg-[#C4002E]/40 transition-colors duration-500'></div>
                     <div className='absolute inset-0 flex flex-col items-center justify-center'>
                         <h4 className='text-3xl font-bold text-white tracking-tighter mb-2'>
