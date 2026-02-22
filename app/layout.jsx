@@ -8,8 +8,30 @@ const chakraPetch = Chakra_Petch({
 })
 
 export const metadata = {
-    title: "ÊTRE",
-    description: "ÊTRE Shop",
+    title: {
+        default: "ÊTRE | Rise With Confidence",
+        template: "%s | ÊTRE"
+    },
+    description: "ÊTRE Sportswear - Experience the fusion of elite performance and street aesthetics. Premium activewear designed for precision and built for performance.",
+    keywords: ["sportswear", "activewear", "premium training", "ÊTRE", "Rise With Confidence", "fitness fashion", "executive gym wear"],
+    authors: [{ name: "ÊTRE" }],
+    openGraph: {
+        title: "ÊTRE | Rise With Confidence",
+        description: "Experience the fusion of elite performance and street aesthetics.",
+        url: "https://etre42.com",
+        siteName: "ÊTRE Sportswear",
+        locale: "th_TH",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "ÊTRE | Rise With Confidence",
+        description: "Premium activewear designed for precision and built for performance.",
+    },
+    robots: {
+        index: true,
+        follow: true,
+    }
 }
 
 export default function RootLayout({ children }) {
