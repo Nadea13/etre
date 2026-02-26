@@ -30,7 +30,7 @@ const TikTokIcon = ({ size = 24, className = "" }) => (
 
 );
 
-const Footer = ({ onOpenAbout }) => {
+const Footer = ({ onOpenAbout, onScrollToSection }) => {
     return (
         <footer className='bg-gray-50 border-t border-gray-200 py-16 px-5 mt-auto'>
             <div className='px-6 max-w-7xl mx-auto flex flex-col gap-12'>
@@ -38,8 +38,8 @@ const Footer = ({ onOpenAbout }) => {
                     <div className='flex flex-col gap-4'>
                         <h5 className='text-[#C4002E] font-bold text-xs tracking-widest'>Navigation</h5>
                         <div className='flex flex-col gap-2 text-sm text-gray-400'>
-                            <a className='hover:text-black transition-colors' href='#'>Shop</a>
-                            <a className='hover:text-black transition-colors' href='#'>Collections</a>
+                            <button onClick={() => onScrollToSection('products')} className='hover:text-black transition-colors text-left'>Products</button>
+                            <button onClick={() => onScrollToSection('collections')} className='hover:text-black transition-colors text-left'>Collections</button>
                         </div>
                     </div>
                     <div className='flex flex-col gap-4'>
