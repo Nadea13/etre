@@ -1,8 +1,7 @@
-
 'use client'
 import React, { useState, useEffect } from 'react';
 
-const Header = () => {
+const Header = ({ onOpenAbout }) => {
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
@@ -12,6 +11,19 @@ const Header = () => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    const scrollToSection = (id) => {
+        const element = document.getElementById(id);
+        if (element) {
+            const headerOffset = 64; // Height of header is h-16 (64px)
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.scrollY - headerOffset;
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }
+    };
 
     return (
         <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm' : 'bg-transparent border-b border-transparent'}`}>
@@ -28,9 +40,24 @@ const Header = () => {
                     </svg>
                 </div>
 
-                <a className='text-3xl font-bold tracking-widest uppercase hover:text-[#C4002E] transition-colors text-black' href='/'>ÊTRE</a>
+                <a className={`text-3xl font-bold tracking-widest uppercase hover:text-[#C4002E] transition-colors ${scrolled ? 'text-black' : 'text-white'}`} href='/'>ÊTRE</a>
+
+                <div className="flex-1"></div>
+
+                <div className="flex gap-4">
+                    <button onClick={() => scrollToSection('products')} className={`text-sm tracking-widest uppercase hover:text-[#C4002E] transition-colors ${scrolled ? 'text-black' : 'text-white'}`}>Products</button>
+                    <button onClick={() => scrollToSection('collections')} className={`text-sm tracking-widest uppercase hover:text-[#C4002E] transition-colors ${scrolled ? 'text-black' : 'text-white'}`}>Collections</button>
+                </div>
+
+                <button
+                    onClick={onOpenAbout}
+                    className={`text-sm tracking-widest uppercase hover:text-[#C4002E] transition-colors ${scrolled ? 'text-black' : 'text-white'}`}
+                >
+                    About
+                </button>
 
             </div>
+
         </header>
     );
 };
