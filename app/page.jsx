@@ -9,9 +9,11 @@ import Marquee from './components/Marquee';
 import CollectionsTeaser from './components/CollectionsTeaser';
 import Footer from './components/Footer';
 import AboutPopup from './components/AboutPopup';
+import TermsConditionsPopup from './components/TermsConditionsPopup';
 
 const EtreLandingPage = () => {
     const [isAboutOpen, setIsAboutOpen] = useState(false);
+    const [isTermsOpen, setIsTermsOpen] = useState(false);
 
     const scrollToSection = (id) => {
         const element = document.getElementById(id);
@@ -39,10 +41,11 @@ const EtreLandingPage = () => {
                 <ProductGrid />
                 <Marquee />
                 <CollectionsTeaser />
-                <Footer onOpenAbout={() => setIsAboutOpen(true)} onScrollToSection={scrollToSection} />
+                <Footer onOpenAbout={() => setIsAboutOpen(true)} onOpenTerms={() => setIsTermsOpen(true)} onScrollToSection={scrollToSection} />
             </div>
 
             <AboutPopup isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
+            <TermsConditionsPopup isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
         </div>
     );
 };
