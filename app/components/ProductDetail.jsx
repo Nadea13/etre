@@ -1,17 +1,23 @@
 
 'use client'
 import React, { useState, useEffect, useRef } from 'react';
-import { X, ChevronLeft, ChevronRight, ShoppingBag } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ShoppingCart, CheckCircle2, Minus, Plus } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
 const ProductDetail = ({ isOpen, onClose, product }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [selectedSize, setSelectedSize] = useState('M');
+    const [quantity, setQuantity] = useState(1);
+    const [addedToCart, setAddedToCart] = useState(false);
+    const { addToCart } = useCart();
     const sizeGuideRef = useRef(null);
 
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
             setCurrentImageIndex(0);
+            setQuantity(1);
+            setAddedToCart(false);
         } else {
             document.body.style.overflow = 'unset';
         }
@@ -19,6 +25,13 @@ const ProductDetail = ({ isOpen, onClose, product }) => {
     }, [isOpen]);
 
     if (!isOpen || !product) return null;
+
+    const handleAddToCart = () => {
+        addToCart(product, selectedSize, quantity);
+        setAddedToCart(true);
+        // Reset "Added" state after 2 seconds
+        setTimeout(() => setAddedToCart(false), 2000);
+    };
 
     const nextImage = () => {
         setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
@@ -100,7 +113,7 @@ const ProductDetail = ({ isOpen, onClose, product }) => {
                             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighter text-black leading-tight">
                                 {product.name}
                             </h2>
-                            <p className="text-2xl font-bold text-gray-900 mt-2">
+                            <p className="text-2xl font-bold text-[#C4002E] mt-2">
                                 {product.price}
                             </p>
                         </div>
@@ -130,6 +143,30 @@ const ProductDetail = ({ isOpen, onClose, product }) => {
                             </div>
                         </div>
 
+                        <div className="flex flex-col gap-4">
+                            <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Quantity</span>
+                            <div className="flex items-center gap-6">
+                                <div className="flex items-center border-2 border-gray-100">
+                                    <button 
+                                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                        className="p-3 hover:bg-gray-50 transition-colors"
+                                    >
+                                        <Minus className="w-4 h-4 text-black" />
+                                    </button>
+                                    <span className="w-12 text-center font-bold text-lg">{quantity}</span>
+                                    <button 
+                                        onClick={() => setQuantity(quantity + 1)}
+                                        className="p-3 hover:bg-gray-50 transition-colors"
+                                    >
+                                        <Plus className="w-4 h-4 text-black" />
+                                    </button>
+                                </div>
+                                <p className="text-xs text-[#C4002E] font-bold uppercase tracking-widest">
+                                    {(parseFloat(product.price.replace(/[^0-9.-]+/g, "")) * quantity).toLocaleString()} THB
+                                </p>
+                            </div>
+                        </div>
+
                         <div className="flex flex-col gap-3">
                             <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Description</span>
                             <p className="text-gray-600 leading-relaxed text-sm whitespace-pre-wrap">
@@ -148,9 +185,21 @@ const ProductDetail = ({ isOpen, onClose, product }) => {
                     </div>
 
                     <div className="p-8 border-t border-gray-100 bg-white">
-                        <button className="w-full bg-[#C4002E] text-white py-5 font-bold tracking-widest text-sm uppercase flex items-center justify-center gap-4 transition-all hover:bg-black active:scale-95 shadow-xl">
-                            <ShoppingBag className="w-5 h-5" />
-                            Add to Cart
+                        <button
+                            onClick={handleAddToCart}
+                            className={`w-full py-5 font-bold tracking-widest text-sm uppercase flex items-center justify-center gap-4 transition-all active:scale-95 shadow-xl ${addedToCart ? 'bg-green-600 text-white' : 'bg-[#C4002E] text-white hover:bg-black'}`}
+                        >
+                            {addedToCart ? (
+                                <>
+                                    <CheckCircle2 className="w-5 h-5" />
+                                    Added to Cart
+                                </>
+                            ) : (
+                                <>
+                                    <ShoppingCart className="w-5 h-5" />
+                                    Add to Cart
+                                </>
+                            )}
                         </button>
                     </div>
                 </div>

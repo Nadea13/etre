@@ -12,7 +12,7 @@ const CollectionsTeaser = () => {
                 </div>
             </div>
 
-            <div className='py-20 px-6 max-w-7xl mx-auto w-full'>
+            <div className='p-6 max-w-7xl mx-auto w-full'>
                 <div className='grid md:grid-cols-2 gap-6'>
                     <div className='relative h-64 md:h-80 w-full overflow-hidden group cursor-pointer border border-gray-200'>
                         <div className='absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110'

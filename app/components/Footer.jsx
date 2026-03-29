@@ -56,7 +56,7 @@ const Footer = ({ onOpenAbout, onOpenTerms, onScrollToSection }) => {
                         <a className='text-gray-500 hover:text-[#C4002E] transition-colors' href='https://www.instagram.com/etre42_th/'>
                             <Instagram />
                         </a>
-                        <a className='text-gray-500 hover:text-[#C4002E] transition-colors' href='https://lin.ee/CalWHc85'>
+                        <a className='text-gray-500 hover:text-[#C4002E] transition-colors' href='https://line.me/R/ti/p/@806rsfmj'>
                             <LineIcon />
                         </a>
                         <a className='text-gray-500 hover:text-[#C4002E] transition-colors' href='https://www.facebook.com/profile.php?id=61577902331062'>

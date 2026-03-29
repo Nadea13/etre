@@ -41,12 +41,12 @@ const Hero = () => {
                     <div className='h-1.5 w-24 bg-[#C4002E] mt-4'></div>
                 </div>
                 <div className='pt-4'>
-                    <button className='group relative overflow-hidden bg-[#C4002E] text-white px-10 py-5 w-full md:w-auto min-w-[240px] text-center font-bold tracking-widest text-sm transition-all active:scale-95 hover:bg-[#914a31] rounded-none shadow-xl'>
+                    <a href='https://line.me/R/ti/p/@806rsfmj' target='_blank' rel='noopener noreferrer' className='group relative overflow-hidden bg-[#C4002E] text-white px-10 py-5 w-full md:w-fit text-center font-bold tracking-widest text-sm transition-all active:scale-95 hover:bg-[#914a31] rounded-none shadow-xl flex items-center justify-center'>
                         <span className='relative z-10 text-lg flex items-center justify-center gap-3'>
                             Explore Collection
                             <ArrowRight className='w-5 h-5 transition-transform group-hover:translate-x-2' />
                         </span>
-                    </button>
+                    </a>
                 </div>
             </div>
 

@@ -34,11 +34,17 @@ export const metadata = {
     }
 }
 
+import { CartProvider } from "./context/CartContext"
+import CartDrawer from "./components/CartDrawer"
+
 export default function RootLayout({ children }) {
     return (
         <html lang="en">
             <body className={`${chakraPetch.className} antialiased`}>
-                {children}
+                <CartProvider>
+                    {children}
+                    <CartDrawer />
+                </CartProvider>
             </body>
         </html>
     )

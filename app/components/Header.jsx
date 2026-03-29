@@ -1,10 +1,12 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ShoppingCart } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
 const Header = ({ onOpenAbout, onScrollToSection }) => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { itemCount, setIsCartOpen } = useCart();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -38,15 +40,39 @@ const Header = ({ onOpenAbout, onScrollToSection }) => {
                     >
                         About
                     </button>
+                    <button
+                        onClick={() => setIsCartOpen(true)}
+                        className={`relative p-2 hover:text-[#C4002E] transition-colors ${scrolled ? 'text-black' : 'text-white'}`}
+                    >
+                        <ShoppingCart className="w-6 h-6" />
+                        {itemCount > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-[#C4002E] text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">
+                                {itemCount}
+                            </span>
+                        )}
+                    </button>
                 </div>
 
-                <div className="md:hidden relative">
-                    <button
-                        className={`flex items-center justify-center p-2 rounded-md hover:bg-black/5 transition-colors ${scrolled ? 'text-black' : 'text-white'}`}
-                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    >
-                        {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-                    </button>
+                <div className="md:hidden flex items-center gap-2 relative">
+                        <button
+                            className={`flex items-center justify-center p-2 rounded-md hover:bg-black/5 transition-colors ${scrolled ? 'text-black' : 'text-white'}`}
+                            onClick={() => setIsCartOpen(true)}
+                        >
+                            <div className="relative">
+                                <ShoppingCart className="w-7 h-7" />
+                                {itemCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 bg-[#C4002E] text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">
+                                        {itemCount}
+                                    </span>
+                                )}
+                            </div>
+                        </button>
+                        <button
+                            className={`flex items-center justify-center p-2 rounded-md hover:bg-black/5 transition-colors ${scrolled ? 'text-black' : 'text-white'}`}
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        >
+                            {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+                        </button>
 
                     {/* Dropdown Menu */}
                     <div className={`absolute top-full right-0 w-48 bg-white border border-gray-100 shadow-xl py-2 transition-all duration-200 transform origin-top-right ${mobileMenuOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}>
