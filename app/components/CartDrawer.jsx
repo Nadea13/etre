@@ -25,11 +25,11 @@ const CartDrawer = () => {
 
     const handleCheckout = () => {
         const message = cartItems.map(item => 
-            `- ${item.name} (Size: ${item.selectedSize}) x ${item.quantity} = ${item.price}`
+            `- ${item.name} (Size: ${item.selectedSize}) ${item.quantity} ชิ้น ราคา ${item.price} บาท`
         ).join('\n');
         
-        const totalText = `Total: ${cartTotal.toLocaleString()} THB`;
-        const finalMessage = `สนใจสั่งซื้อสินค้าครับ:\n${message}\n\n${totalText}`;
+        const totalText = `รวมเป็นเงิน ${cartTotal.toLocaleString()} บาท`;
+        const finalMessage = `สนใจสั่งซื้อสินค้า:\n${message}\n\n${totalText}`;
         
         const lineUrl = `https://line.me/R/oaMessage/@806rsfmj/?${encodeURIComponent(finalMessage)}`;
         window.open(lineUrl, '_blank');
