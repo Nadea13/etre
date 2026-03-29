@@ -67,8 +67,8 @@ const CartDrawer = () => {
                         <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
                             {cartItems.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-center gap-6">
-                                    <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center">
-                                        <ShoppingCart className="w-10 h-10 text-gray-300" />
+                                    <div className="w-24 h-24 bg-black/5 rounded-full flex items-center justify-center">
+                                        <ShoppingCart className="w-10 h-10 text-black/20" />
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <p className="text-xl font-bold text-gray-900">Your cart is empty</p>
