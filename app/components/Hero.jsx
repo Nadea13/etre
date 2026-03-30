@@ -4,10 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 
 const slides = [
-    '/uploads/486A0090.jpg',
-    '/uploads/486A9348.jpg',
-    '/uploads/486A0070.jpg',
-    '/uploads/486A9732.jpg',
+    '/uploads/486A9491.jpg',
+    '/uploads/486A9333.jpg',
+    '/uploads/486A9727.jpg',
 ];
 
 const Hero = () => {
