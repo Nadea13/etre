@@ -10,7 +10,7 @@ const productsData = [
         price: "1,700 THB",
         collection: "First Collection",
         badge: "Best Seller",
-        mainImage: "/uploads/486A0232.jpg",
+        mainImage: "/uploads/486A9491.jpg",
         images: [
             "/uploads/486A9494.jpg",
             "/uploads/486A9491.jpg",
@@ -27,7 +27,7 @@ const productsData = [
         price: "2,190 THB",
         collection: "First Collection",
         badge: "Best Seller",
-        mainImage: "/uploads/486A0271.jpg",
+        mainImage: "/uploads/486A9727.jpg",
         images: [
             "/uploads/S__18292807.jpg",
             "/uploads/486A9058.jpg",
@@ -45,7 +45,7 @@ const productsData = [
         price: "2,300 THB",
         collection: "First Collection",
         badge: "New Arrival",
-        mainImage: "/uploads/486A0502.jpg",
+        mainImage: "/uploads/486A9333.jpg",
         images: [
             "/uploads/486A9078.jpg",
             "/uploads/486A9088.jpg",
