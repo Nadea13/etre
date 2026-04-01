@@ -118,7 +118,7 @@ const TermsConditionsPopup = ({ isOpen, onClose }) => {
                                 </span>
                                 <div className="text-gray-600 space-y-3 text-[15px] font-light pl-8">
                                     <p className="flex items-center gap-2 text-black font-medium pb-2">
-                                        <span>🎯</span> เราเชื่อว่าทุกคนสมควรได้เสื้อที่พอดีตัว — เปลี่ยนไซส์ได้ ไม่มีคำถาม
+                                        เราเชื่อว่าทุกคนสมควรได้เสื้อที่พอดีตัว — เปลี่ยนไซส์ได้ ไม่มีคำถาม
                                     </p>
                                     <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-1 md:gap-4">
                                         <span className="font-semibold text-black">เงื่อนไขการเปลี่ยน</span>
