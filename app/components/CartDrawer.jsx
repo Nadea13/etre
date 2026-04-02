@@ -98,7 +98,7 @@ const CartDrawer = () => {
                                     {cartItems.map((item, idx) => (
                                         <div key={`${item.id}-${item.selectedSize}-${idx}`} className="flex gap-4">
                                             <div className="w-24 h-24 bg-gray-50 flex-shrink-0 border border-gray-100">
-                                                <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover" />
+                                                <img src={item.mainImage} alt={item.name} className="w-full h-full object-cover" />
                                             </div>
                                             <div className="flex-1 flex flex-col justify-between py-0.5">
                                                 <div className="flex justify-between items-start">
