@@ -2,6 +2,8 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight, ShoppingCart, CheckCircle2, Minus, Plus } from 'lucide-react';
+import Image from 'next/image';
+
 import { useCart } from '../context/CartContext';
 
 const ProductDetail = ({ isOpen, onClose, product }) => {
@@ -67,10 +69,13 @@ const ProductDetail = ({ isOpen, onClose, product }) => {
                 {/* Left: Image Gallery */}
                 <div className="relative w-full md:w-3/5 bg-gray-50 flex flex-col h-1/2 md:h-auto border-b md:border-b-0 md:border-r border-gray-100">
                     <div className="relative flex-1 overflow-hidden flex items-center justify-center">
-                        <img
+                        <Image
                             src={product.images[currentImageIndex]}
                             alt={product.name}
-                            className="w-full h-full object-cover object-center transition-all duration-500 transform hover:scale-105"
+                            fill
+                            className="object-cover object-center transition-all duration-500 transform hover:scale-105"
+                            sizes="(max-width: 1024px) 100vw, 60vw"
+                            priority
                         />
 
                         {product.images.length > 1 && (
@@ -99,7 +104,13 @@ const ProductDetail = ({ isOpen, onClose, product }) => {
                                 onClick={() => setCurrentImageIndex(idx)}
                                 className={`relative w-20 h-20 flex-shrink-0 border-2 transition-all ${currentImageIndex === idx ? 'border-[#C4002E]' : 'border-transparent opacity-60 hover:opacity-100'}`}
                             >
-                                <img src={img} alt="" className="w-full h-full object-cover" />
+                                <Image 
+                                    src={img} 
+                                    alt="" 
+                                    fill
+                                    className="object-cover" 
+                                    sizes="80px"
+                                />
                             </button>
                         ))}
                     </div>
@@ -178,8 +189,24 @@ const ProductDetail = ({ isOpen, onClose, product }) => {
                         <div ref={sizeGuideRef} className="flex flex-col gap-4 pt-4">
                             <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Size Guide</span>
                             <div className="flex flex-col gap-4">
-                                <img src="/uploads/IMG_1432.JPG" alt="Size Guide 1" className="w-full h-auto border border-gray-100" />
-                                <img src="/uploads/IMG_1433.JPG" alt="Size Guide 2" className="w-full h-auto border border-gray-100" />
+                                <div className="relative w-full aspect-[3/4]">
+                                    <Image 
+                                        src="/uploads/IMG_1432.JPG" 
+                                        alt="Size Guide 1" 
+                                        fill
+                                        className="object-contain border border-gray-100" 
+                                        sizes="(max-width: 768px) 100vw, 40vw"
+                                    />
+                                </div>
+                                <div className="relative w-full aspect-[3/4]">
+                                    <Image 
+                                        src="/uploads/IMG_1433.JPG" 
+                                        alt="Size Guide 2" 
+                                        fill
+                                        className="object-contain border border-gray-100" 
+                                        sizes="(max-width: 768px) 100vw, 40vw"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

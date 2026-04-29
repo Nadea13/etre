@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { Plus, Star } from 'lucide-react';
 import ProductDetail from './ProductDetail';
+import Image from 'next/image';
+
 
 const productsData = [
     {
@@ -125,8 +127,14 @@ const ProductGrid = () => {
                                 className='col-span-2 md:col-span-3 lg:col-span-4 flex flex-col md:flex-row bg-white border-2 border-[#AC593B] shadow-[0_0_35px_rgba(172,89,59,0.15)] group hover:shadow-[0_0_50px_rgba(172,89,59,0.25)] transition-all duration-500 cursor-pointer overflow-hidden'
                             >
                                 <div className='md:w-1/2 relative aspect-[4/3] md:aspect-auto overflow-hidden'>
-                                    <div className='absolute inset-0 bg-cover bg-center transition-all duration-1000 scale-100 group-hover:scale-105'
-                                        style={{ backgroundImage: `url(${product.mainImage})` }}></div>
+                                    <Image 
+                                        src={product.mainImage} 
+                                        alt={product.name}
+                                        fill
+                                        className='object-cover object-center transition-all duration-1000 scale-100 group-hover:scale-105'
+                                        sizes="(max-width: 768px) 100vw, 50vw"
+                                        priority
+                                    />
                                     <div className='absolute inset-0 bg-gradient-to-r from-black/20 to-transparent'></div>
                                     
                                     <div className='absolute top-2 left-2 md:top-6 md:left-6 px-2 py-1 bg-[#AC593B] text-white font-black text-[9px] tracking-[0.2em] shadow-xl flex items-center gap-2 ring-2 ring-black/5'>
@@ -178,8 +186,13 @@ const ProductGrid = () => {
                             className='flex flex-col bg-white border border-gray-200 group hover:border-[#C4002E]/50 transition-all duration-300 cursor-pointer'
                         >
                             <div className='relative w-full aspect-[4/5] bg-gray-100 overflow-hidden'>
-                                <div className='absolute inset-0 bg-cover bg-center transition-all duration-700 scale-100 group-hover:scale-110'
-                                    style={{ backgroundImage: `url(${product.mainImage})` }}></div>
+                                <Image
+                                    src={product.mainImage}
+                                    alt={product.name}
+                                    fill
+                                    className='object-cover object-center transition-all duration-700 scale-100 group-hover:scale-110'
+                                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                                />
 
                                  {product.badge && (
                                     <div className={`absolute top-2 left-2 md:top-4 md:left-4 px-2 py-1 text-[9px] font-bold tracking-tighter shadow-sm flex items-center gap-1 ${
